@@ -4,6 +4,7 @@ import subprocess
 
 import urllib2
 URLPREFIX="http://www.youtube.com/watch?feature=player_embedded&v="
+'''
 kangxiurl=urllib2.urlopen("http://www.maplestage.com/show/%E5%BA%B7%E7%86%99%E4%BE%86%E4%BA%86/")
 kangxicontent=kangxiurl.read()
 kangxisoup = BeautifulSoup(kangxicontent)
@@ -87,8 +88,7 @@ for i in range(0,len(links)):
     print urlstr
     cmd=['.\\youtube-dl.exe']+string.split(urlstr)
     print cmd
-    #subprocess.call(cmd)
-'''
+    subprocess.call(cmd)
 
 
 
