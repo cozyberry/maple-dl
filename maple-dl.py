@@ -105,7 +105,12 @@ def main(argv):
         print urlstr
         cmd=['.\\youtube-dl.exe']+string.split(urlstr)
         print cmd
-        subprocess.call(cmd)
+        #If failed try 5 times at most
+        for i in range(0,5):
+            cmdout=subprocess.check_output(cmd)
+            if string.find(string.lower(cmdout),'error') == -1:
+                break
+
 
 if __name__=='__main__':
     if len(sys.argv) == 1:
