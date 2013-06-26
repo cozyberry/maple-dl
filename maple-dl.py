@@ -23,17 +23,27 @@ print episodes[0].contents[800]
 '''
 KANGXI="http://www.maplesi.com/node/81949/%E5%BA%B7%E7%86%99%E4%BE%86%E4%BA%86-20130619-%E9%BB%83%E7%BE%A9%E9%81%94-%E9%84%A7%E7%A6%8F%E5%A6%82-%E4%B8%81%E5%99%B9-%E5%AE%B6%E5%AE%B6-mp%E9%AD%94%E5%B9%BB%E5%8A%9B%E9%87%8F-%E9%BB%83%E5%9C%8B%E5%80%AB-%E9%82%A3%E4%BA%9B%E5%B9%B4%E6%88%91%E5%80%91%E6%B5%81%E8%A1%8C%E7%9A%84%E7%B6%93%E5%85%B8%E6%AD%8C%E6%9B%B2/"
 def usage():
-    print "Usage: %s [-h] [-u url]"%sys.argv[0]
+    print "Usage: %s [-h] [-u url] [-r retry_times]"%sys.argv[0]
     print "       -u url: the target url on maplestage site"
+    print "       -r retry_times: retry how many times at most if failed"
 
 def main(argv):
-    opts,args=getopt.getopt(argv,"hu:")
+    limits=5
+    try:
+        opts,args=getopt.getopt(argv,"hu:r:")
+
+    except getopt.GetoptError:
+            usage()
+            sys.exit(1)
+
     for opt,arg in opts:
         if opt in ('-h','--help'):
             usage()
             sys.exit(0)
         elif opt in('-u'):
             urlAddr=arg
+        elif opt in('-r'):
+            limits=int(arg)
     if urlAddr=="":
         print "Please input target url"
         sys.exit(1)
@@ -106,9 +116,11 @@ def main(argv):
         cmd=['.\\youtube-dl.exe']+string.split(urlstr)
         print cmd
         #If failed try 5 times at most
-        for i in range(0,5):
-            cmdout=subprocess.check_output(cmd)
-            if string.find(string.lower(cmdout),'error') == -1:
+        for i in range(0,limits):
+            res=subprocess.call(cmd)
+            if res == 0:
+                break
+            #if string.find(string.lower(cmdout),'error') == -1:
                 break
 
 
